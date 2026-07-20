@@ -53,16 +53,26 @@ export function useInvestmentCalculator() {
     return decimalRate;
   }
 
+  function parseBrazilianNumber(value: string): number {
+  const cleanedValue = value
+    .trim()
+    .replace(/[^\d,.-]/g, '')
+    .replace(/\./g, '')
+    .replace(',', '.');
+
+  return Number(cleanedValue);
+  }
+
   function handleCalculate(
     event: FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault();
 
-    const principal = Number(initialValue);
+    const principal = parseBrazilianNumber(initialValue);
     const contribution =
-      Number(monthlyContribution) || 0;
-    const rate = Number(interestRate);
-    const time = Number(period);
+      parseBrazilianNumber(monthlyContribution) || 0;
+    const rate = parseBrazilianNumber(interestRate);
+    const time = parseBrazilianNumber(period);
 
     const hasEmptyFields =
       initialValue.trim() === '' ||
@@ -130,7 +140,7 @@ export function useInvestmentCalculator() {
     setPeriod,
     setTimeUnit,
     setRateUnit,
-
+    parseBrazilianNumber,
     handleCalculate,
   };
 }
